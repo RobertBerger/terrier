@@ -37,7 +37,7 @@ build-linux64:
 	#$(GOV111PREFIX) GOOS=linux GOARCH=amd64 go build -o $(OUTPUTDIR)/$(BINARY_NAME)-linux-amd64 ./
 	#$(GOV111PREFIX) GOOS=linux GOARCH=amd64 go build -buildmode=pie -o $(OUTPUTDIR)/$(BINARY_NAME)-linux-amd64 ./
 	#go build --ldflags '-extldflags "-static"' -o test main.go && rm -f libsmth.{o,a}
-	$(GOV111PREFIX) GOOS=linux GOARCH=amd64 go build --ldflags '-extldflags "-static"' -o $(OUTPUTDIR)/$(BINARY_NAME)-linux-amd64 ./
+	CGO_ENABLED=0 $(GOV111PREFIX) GOOS=linux GOARCH=amd64 go build -ldflags="-extldflags=-static" -o $(OUTPUTDIR)/$(BINARY_NAME)-linux-amd64 ./
 	#$(GPGME_ENV) $(GO) build $(MOD_VENDOR) ${GO_DYN_FLAGS} ${LDFLAGS} -gcflags "$(GOGCFLAGS)" -tags "$(BUILDTAGS)" -o $@ ./cmd/skopeo
 
 build-darwin64:
