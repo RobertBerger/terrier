@@ -34,7 +34,9 @@ build-linux64:
 	@echo ">> running check for unused/missing packages in go.mod"
 	@go mod tidy
 	@echo ">> building Linux 64bit binary"
-	$(GOV111PREFIX) GOOS=linux GOARCH=amd64 go build -o $(OUTPUTDIR)/$(BINARY_NAME)-linux-amd64 ./
+	#$(GOV111PREFIX) GOOS=linux GOARCH=amd64 go build -o $(OUTPUTDIR)/$(BINARY_NAME)-linux-amd64 ./
+	$(GOV111PREFIX) GOOS=linux GOARCH=amd64 go build -buildmode=pie -o $(OUTPUTDIR)/$(BINARY_NAME)-linux-amd64 ./
+	#$(GPGME_ENV) $(GO) build $(MOD_VENDOR) ${GO_DYN_FLAGS} ${LDFLAGS} -gcflags "$(GOGCFLAGS)" -tags "$(BUILDTAGS)" -o $@ ./cmd/skopeo
 
 build-darwin64:
 	@echo ">> running check for unused/missing packages in go.mod"
