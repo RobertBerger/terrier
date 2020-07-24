@@ -21,7 +21,7 @@ else
 	endif
 endif
 
-all: clean build-linux64 build-darwin64 build-linux32 build-darwin32
+all: clean build-linux64 build-linux64-static build-darwin64 build-linux32 build-darwin32
 
 clean:
 	@echo ">> removing previous builds"
@@ -34,11 +34,13 @@ build-linux64:
 	@echo ">> running check for unused/missing packages in go.mod"
 	@go mod tidy
 	@echo ">> building Linux 64bit binary"
-	#$(GOV111PREFIX) GOOS=linux GOARCH=amd64 go build -o $(OUTPUTDIR)/$(BINARY_NAME)-linux-amd64 ./
-	#$(GOV111PREFIX) GOOS=linux GOARCH=amd64 go build -buildmode=pie -o $(OUTPUTDIR)/$(BINARY_NAME)-linux-amd64 ./
-	#go build --ldflags '-extldflags "-static"' -o test main.go && rm -f libsmth.{o,a}
-	CGO_ENABLED=0 $(GOV111PREFIX) GOOS=linux GOARCH=amd64 go build -ldflags="-extldflags=-static" -o $(OUTPUTDIR)/$(BINARY_NAME)-linux-amd64 ./
-	#$(GPGME_ENV) $(GO) build $(MOD_VENDOR) ${GO_DYN_FLAGS} ${LDFLAGS} -gcflags "$(GOGCFLAGS)" -tags "$(BUILDTAGS)" -o $@ ./cmd/skopeo
+	$(GOV111PREFIX) GOOS=linux GOARCH=amd64 go build -o $(OUTPUTDIR)/$(BINARY_NAME)-linux-amd64 ./
+
+build-linux64-static:
+	@echo ">> running check for unused/missing packages in go.mod"
+	@go mod tidy
+	@echo ">> building Linux 64bit binary - statically linked"
+	CGO_ENABLED=0 $(GOV111PREFIX) GOOS=linux GOARCH=amd64 go build -ldflags="-extldflags=-static" -o $(OUTPUTDIR)/$(BINARY_NAME)-linux-amd64-static ./
 
 build-darwin64:
 	@echo ">> running check for unused/missing packages in go.mod"
